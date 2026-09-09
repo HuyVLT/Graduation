@@ -545,6 +545,26 @@ export function InvitationExperience() {
                 <strong>{invitationDetails.dressCode}</strong>
               </article>
             </div>
+            <figure className="ceremony-program">
+              <figcaption className="ceremony-program-copy">
+                <p className="mini-label">FPT University · 2022—2026</p>
+                <h3>Chương trình<br />ngày tốt nghiệp.</h3>
+                <p>
+                  Lịch trình chính thức dành cho lễ tốt nghiệp của Võ Lê Trường Huy,
+                  từ lúc check-in đến nghi thức tung mũ.
+                </p>
+                <span>Nhóm 1 · STT 354</span>
+              </figcaption>
+              <div className="ceremony-program-visual">
+                <Image
+                  src="/event/fpt-graduation-2026.png"
+                  alt="Lịch trình lễ tốt nghiệp FPT 2026 của Võ Lê Trường Huy"
+                  width={1004}
+                  height={1771}
+                  sizes="(max-width: 760px) 88vw, 42vw"
+                />
+              </div>
+            </figure>
           </SectionReveal>
         </section>
 
