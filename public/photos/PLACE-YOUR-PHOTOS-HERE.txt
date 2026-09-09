@@ -1,0 +1,2 @@
+Đặt ảnh thật vào thư mục này theo tên file gợi ý trong data/photos.ts.
+Sau đó đổi src: null thành src: fileHint cho từng ảnh đã sẵn sàng.
