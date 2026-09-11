@@ -6,11 +6,11 @@ import './globals.css';
 export const metadata: Metadata = {
   title: 'Mở Khóa Kỷ Niệm · Thiệp mời tốt nghiệp',
   description:
-    'Một bức tường locker lưu giữ hành trình 12 năm và lời mời đến ngày tốt nghiệp.',
+    'Một bức tường locker lưu giữ hành trình bốn năm tại FPT và lời mời đến ngày tốt nghiệp.',
   openGraph: {
     title: 'Mở Khóa Kỷ Niệm · Thiệp mời tốt nghiệp',
     description:
-      'Mở từng cánh locker, gặp lại hành trình 12 năm và hẹn nhau ở ngày trưởng thành.',
+      'Mở từng cánh locker, gặp lại hành trình tại FPT và hẹn nhau ở ngày trưởng thành.',
     type: 'website',
     locale: 'vi_VN',
   },
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Mở Khóa Kỷ Niệm · Thiệp mời tốt nghiệp',
     description:
-      'Mở từng cánh locker, gặp lại hành trình 12 năm và hẹn nhau ở ngày trưởng thành.',
+      'Mở từng cánh locker, gặp lại hành trình tại FPT và hẹn nhau ở ngày trưởng thành.',
   },
 };
 

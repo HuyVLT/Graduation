@@ -1,0 +1,7 @@
+{
+  "watch": ["vite.config.ts", "package.json"],
+  "ext": "ts,json",
+  "exec": "vinext dev",
+  "signal": "SIGTERM",
+  "delay": 200
+}
