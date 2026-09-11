@@ -10,10 +10,12 @@
 
 # testing
 /coverage
+*.tsbuildinfo
 
 # next.js
 /.next/
 /.vinext/
+/.output/
 /out/
 
 # misc
@@ -33,6 +35,7 @@ yarn-error.log*
 .vercel
 next-env.d.ts
 /dist/
+/.sites-runtime/
 /.wrangler/
 /outputs/
 /work/
