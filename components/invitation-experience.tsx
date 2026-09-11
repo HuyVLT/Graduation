@@ -35,45 +35,88 @@ const unlockSparkDirections = [
   [0, 74], [-52, 52], [-74, 0], [-52, -52],
 ];
 
-function PageIntro() {
+function PageIntro({ onUnlock }: { onUnlock: () => void }) {
+  const [isUnlocking, setIsUnlocking] = useState(false);
+
+  const unlock = () => {
+    if (isUnlocking) return;
+    onUnlock();
+    setIsUnlocking(true);
+  };
+
   return (
-    <motion.div
+    <MotionConfig reducedMotion="never">
+      <motion.div
       className="page-intro"
       initial={{ opacity: 1, visibility: 'visible' }}
-      animate={{ opacity: [1, 1, 0], visibility: ['visible', 'visible', 'hidden'] }}
+      animate={isUnlocking
+        ? { opacity: [1, 1, 0], visibility: ['visible', 'visible', 'hidden'] }
+        : { opacity: 1, visibility: 'visible' }}
       transition={{ duration: 2.55, times: [0, 0.9, 1], ease: 'easeOut' }}
-      aria-hidden="true"
     >
       <motion.div
         className="intro-curtain intro-curtain-left"
         initial={{ x: 0 }}
-        animate={{ x: '-102%' }}
+        animate={{ x: isUnlocking ? '-102%' : 0 }}
         transition={{ duration: 0.9, delay: 1.35, ease: [0.76, 0, 0.24, 1] }}
       />
       <motion.div
         className="intro-curtain intro-curtain-right"
         initial={{ x: 0 }}
-        animate={{ x: '102%' }}
+        animate={{ x: isUnlocking ? '102%' : 0 }}
         transition={{ duration: 0.9, delay: 1.35, ease: [0.76, 0, 0.24, 1] }}
       />
-      <motion.div
+      <div className="intro-grid" aria-hidden="true" />
+      <motion.button
+        type="button"
         className="intro-lock-stage"
+        onClick={unlock}
+        disabled={isUnlocking}
+        aria-label="Mở khóa kỷ niệm"
         initial={{ opacity: 1 }}
-        animate={{ opacity: [1, 1, 0] }}
+        animate={isUnlocking ? { opacity: [1, 1, 0] } : { opacity: 1 }}
         transition={{ duration: 1.85, times: [0, 0.72, 1], ease: 'easeOut' }}
       >
         <motion.div
+          className="intro-orbit intro-orbit-outer"
+          aria-hidden="true"
+          animate={isUnlocking
+            ? { rotate: 90, scale: 1.3, opacity: 0 }
+            : { rotate: 360, scale: [1, 1.04, 1], opacity: 1 }}
+          transition={isUnlocking
+            ? { duration: 0.8, ease: 'easeOut' }
+            : { rotate: { duration: 18, repeat: Infinity, ease: 'linear' }, scale: { duration: 3.2, repeat: Infinity } }}
+        />
+        <motion.div
+          className="intro-orbit intro-orbit-inner"
+          aria-hidden="true"
+          animate={isUnlocking
+            ? { rotate: -120, scale: 1.5, opacity: 0 }
+            : { rotate: -360, opacity: 1 }}
+          transition={isUnlocking
+            ? { duration: 0.9, ease: 'easeOut' }
+            : { duration: 12, repeat: Infinity, ease: 'linear' }}
+        />
+        <span className="intro-edition" aria-hidden="true">
+          <small>FPT</small>
+          <strong>2026</strong>
+        </span>
+        <motion.div
           className="intro-lock intro-lock-closed"
-          initial={{ opacity: 0, scale: 0.72, rotate: -8 }}
-          animate={{ opacity: [0, 1, 1, 0], scale: [0.72, 1, 1.04, 0.9], rotate: [-8, 0, 0, -8] }}
-          transition={{ duration: 1.38, times: [0, 0.2, 0.66, 1], ease: 'easeOut' }}
+          initial={{ opacity: 1, scale: 1, rotate: 0 }}
+          animate={isUnlocking
+            ? { opacity: [1, 1, 0], scale: [1, 1.04, 0.9], rotate: [0, 0, -8] }
+            : { opacity: 1, scale: 1, rotate: 0 }}
+          transition={{ duration: 1.38, times: [0, 0.66, 1], ease: 'easeOut' }}
         >
           <LockKeyhole aria-hidden="true" />
         </motion.div>
         <motion.div
           className="intro-lock intro-lock-open"
           initial={{ opacity: 0, scale: 0.9, rotate: 8 }}
-          animate={{ opacity: [0, 0, 1, 0], scale: [0.9, 0.9, 1.06, 1.24], rotate: [8, 8, 0, -8] }}
+          animate={isUnlocking
+            ? { opacity: [0, 0, 1, 0], scale: [0.9, 0.9, 1.06, 1.24], rotate: [8, 8, 0, -8] }
+            : { opacity: 0, scale: 0.9, rotate: 8 }}
           transition={{ duration: 1.55, times: [0, 0.5, 0.68, 1], ease: 'easeOut' }}
         >
           <LockKeyholeOpen aria-hidden="true" />
@@ -83,21 +126,34 @@ function PageIntro() {
             <motion.i
               key={`${x}-${y}`}
               initial={{ opacity: 0, x: 0, y: 0, scale: 0.4 }}
-              animate={{ opacity: [0, 0, 1, 0], x: [0, 0, x], y: [0, 0, y], scale: [0.4, 0.4, 1, 0] }}
+              animate={isUnlocking
+                ? { opacity: [0, 0, 1, 0], x: [0, 0, x], y: [0, 0, y], scale: [0.4, 0.4, 1, 0] }
+                : { opacity: 0, x: 0, y: 0, scale: 0.4 }}
               transition={{ duration: 1.55, delay: index * 0.015, times: [0, 0.52, 0.7, 1], ease: 'easeOut' }}
             />
           ))}
         </div>
         <motion.span
           className="intro-copy"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: [0, 1, 1, 0], y: [10, 0, 0, -8] }}
-          transition={{ duration: 1.7, times: [0, 0.2, 0.7, 1] }}
+          initial={{ opacity: 1, y: 0 }}
+          animate={isUnlocking
+            ? { opacity: [1, 1, 0], y: [0, 0, -8] }
+            : { opacity: 1, y: 0 }}
+          transition={{ duration: 1.7, times: [0, 0.7, 1] }}
         >
-          Mở khóa kỷ niệm · FPT 2026
+          {isUnlocking ? 'Đang mở khóa' : 'Chạm để mở khóa'}
         </motion.span>
+        <motion.span
+          className="intro-signature"
+          initial={{ opacity: 0.65 }}
+          animate={isUnlocking ? { opacity: 0 } : { opacity: [0.5, 0.9, 0.5] }}
+          transition={{ duration: 2.8, repeat: isUnlocking ? 0 : Infinity, ease: 'easeInOut' }}
+        >
+          Võ Lê Trường Huy · Graduation invitation
+        </motion.span>
+        </motion.button>
       </motion.div>
-    </motion.div>
+    </MotionConfig>
   );
 }
 
@@ -244,8 +300,8 @@ function Countdown() {
 
 export function InvitationExperience() {
   const heroRef = useRef<HTMLElement>(null);
-  const musicPlayerRef = useRef<HTMLIFrameElement>(null);
-  const [isMusicPlaying, setIsMusicPlaying] = useState(true);
+  const musicPlayerRef = useRef<HTMLAudioElement>(null);
+  const [isMusicPlaying, setIsMusicPlaying] = useState(false);
   const { scrollYProgress } = useScroll({
     target: heroRef,
     offset: ['start start', 'end start'],
@@ -253,46 +309,41 @@ export function InvitationExperience() {
   const heroY = useTransform(scrollYProgress, [0, 1], [0, 18]);
   const heroScale = useTransform(scrollYProgress, [0, 1], [1.04, 1]);
 
-  const sendMusicCommand = (func: string, args: number[] = []) => {
-    musicPlayerRef.current?.contentWindow?.postMessage(
-      JSON.stringify({
-        event: 'command',
-        func,
-        args,
-      }),
-      'https://www.youtube-nocookie.com',
-    );
-  };
+  useEffect(() => {
+    const audio = musicPlayerRef.current;
+    if (!audio) return;
+    audio.volume = 0.2;
+    return () => audio.pause();
+  }, []);
 
-  const startBackgroundMusic = () => {
-    const startAtLowVolume = () => {
-      sendMusicCommand('setVolume', [20]);
-      sendMusicCommand('playVideo');
-    };
-
-    startAtLowVolume();
-    window.setTimeout(startAtLowVolume, 450);
-    window.setTimeout(startAtLowVolume, 1100);
+  const unlockAndPlayMusic = () => {
+    const audio = musicPlayerRef.current;
+    if (!audio) return;
+    audio.volume = 0.2;
+    void audio.play().catch(() => setIsMusicPlaying(false));
   };
 
   const toggleMusic = () => {
-    const nextPlayingState = !isMusicPlaying;
-    sendMusicCommand(nextPlayingState ? 'playVideo' : 'pauseVideo');
-    setIsMusicPlaying(nextPlayingState);
+    const audio = musicPlayerRef.current;
+    if (!audio) return;
+    if (audio.paused) {
+      void audio.play().catch(() => setIsMusicPlaying(false));
+    } else {
+      audio.pause();
+    }
   };
 
   return (
     <MotionConfig reducedMotion="user">
-      <PageIntro />
-      <iframe
+      <PageIntro key="unlock-intro-v2" onUnlock={unlockAndPlayMusic} />
+      <audio
         ref={musicPlayerRef}
-        className="youtube-music-player"
-        src="https://www.youtube-nocookie.com/embed/lV0OOyDUPII?autoplay=1&enablejsapi=1&playsinline=1&loop=1&playlist=lV0OOyDUPII"
-        title="Nhạc nền cho thiệp tốt nghiệp"
-        allow="autoplay; encrypted-media"
-        tabIndex={-1}
-        aria-hidden="true"
-        onLoad={startBackgroundMusic}
+        src="/audio/tro-ve.mp3"
+        loop
+        preload="auto"
+        onPlay={() => setIsMusicPlaying(true)}
+        onPause={() => setIsMusicPlaying(false)}
+        onError={() => setIsMusicPlaying(false)}
       />
       <motion.button
         type="button"
@@ -305,7 +356,7 @@ export function InvitationExperience() {
         <span className="music-toggle-icon" aria-hidden="true">
           {isMusicPlaying ? <Pause /> : <Music2 />}
         </span>
-        <span>{isMusicPlaying ? 'Đang phát' : 'Bật nhạc'}</span>
+        <span>{isMusicPlaying ? 'Đang phát' : 'Phát nhạc'}</span>
       </motion.button>
       <main>
         <section className="hero" ref={heroRef} aria-labelledby="hero-title">
@@ -876,3 +927,5 @@ export function InvitationExperience() {
     </MotionConfig>
   );
 }
+
+
